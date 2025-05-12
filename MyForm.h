@@ -39,6 +39,7 @@ namespace Lb10 {
 	private: System::Windows::Forms::Button^ button2;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Label^ label2;
+	private: System::Windows::Forms::Button^ button3;
 	protected:
 
 	private:
@@ -59,6 +60,7 @@ namespace Lb10 {
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -125,12 +127,27 @@ namespace Lb10 {
 			this->label2->Size = System::Drawing::Size(0, 27);
 			this->label2->TabIndex = 4;
 			// 
+			// button3
+			// 
+			this->button3->BackColor = System::Drawing::Color::DarkTurquoise;
+			this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 10.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->button3->ForeColor = System::Drawing::Color::DarkSlateGray;
+			this->button3->Location = System::Drawing::Point(470, 382);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(275, 42);
+			this->button3->TabIndex = 5;
+			this->button3->Text = L"Записати в файл";
+			this->button3->UseVisualStyleBackColor = false;
+			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::PaleTurquoise;
 			this->ClientSize = System::Drawing::Size(889, 476);
+			this->Controls->Add(this->button3);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button2);
@@ -178,6 +195,27 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	}
 
 	label2->Text = Convert::ToString(product);
+}
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+	String^ fileName = "output.txt";
+	StreamWriter^ writer = File::CreateText(fileName);
+
+	int product = 1;
+
+	for (int i = 0; i < textBox1->Lines->Length; i++) {
+		int number;
+		if (int::TryParse(textBox1->Lines[i], number)) {
+			if (number % 3 == 0) {
+				product *= number;
+				writer->WriteLine(number);
+			}
+		}
+	}
+
+	writer->WriteLine("Добуток чисел, кратних 3: " + Convert::ToString(product));
+	writer->Close();
+
+	MessageBox::Show("Числа, кратні 3, та їх добуток було записано у файл " + fileName);
 }
 };
 }
